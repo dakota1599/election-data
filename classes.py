@@ -45,17 +45,20 @@ class County:
         if len(l) >= 2:
             lColor = ""
             rColor = ""
-
+            total = int(l[0].votes) + int(l[1].votes)
+            percentage = 0
             if int(l[0].votes) > int(l[1].votes):
                 lColor = COLORS.GREEN
                 rColor = COLORS.RED
+                percentage = (int(l[0].votes)/total) * 100
             else:
                 lColor = COLORS.RED
                 rColor = COLORS.GREEN
+                percentage = (float(l[1].votes)/total) * 100
 
             res += lColor + l[0].__str__()
             res += rColor + l[1].__str__()
-            res += COLORS.WHITE + "Difference: {}\n".format(abs(int(l[0].votes) - int(l[1].votes)))
+            res += COLORS.WHITE + "Difference: {}\nWinner has {}% of the vote.\n".format(abs(int(l[0].votes) - int(l[1].votes)), int(percentage))
         elif len(l) == 1:
             res += COLORS.WHITE + l[0].__str__()
         else:
