@@ -10,7 +10,7 @@ def main():
 
     for line in f:
         w = line.split(',')
-        county = election.find(w[4])
+        county = election.findCounty(w[4])
         setCounty = False
         if (county == None):
             county = County(w[4], w[5])
@@ -27,10 +27,11 @@ def main():
         if(setCounty):
             election.addCounty(county)
 
-    
-    print(election.topTwo(pos))
-
     f.close()
+    election.setPositions()
+    menu = Menu(election)
+
+    menu.main()
 
 
 

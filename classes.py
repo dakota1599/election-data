@@ -17,7 +17,6 @@ class Candidate:
     def __str__(self):
         return "{} ({}) - {} - {} votes, Elected?: {}\n".format(self.name, self.party, self.officeDescription, self.votes, self.win)
 
-
 class County:
 
     def __init__(self, id, name):
@@ -68,23 +67,66 @@ class County:
         
         return res
 
+class Position:
 
+    def __init__(self, name):
+        self.name = name
+        self.candidates = []
 
+    def addCandidate(self, candidate: Candidate):
+        self.candidates.append(candidate)
+
+    def sort(self):
+        self.candidates.sort(key=lambda x: int(x.votes), reverse=True)
+
+    def __str__(self):
+        self.sort()
+        res = "\n{}\n----------\n".format(self.name)
+        for c in self.candidates:
+            res += str(c)
+
+        return res
 
 class Election:
 
     def __init__(self):
         self.counties = []
+        self.positions = []
 
-    def find(self, id):
+    def findCounty(self, id):
         for ct in self.counties:
             if ct.id == id:
                 return ct
             
         return None
     
+    def findPosition(self, name):
+        for p in self.positions:
+            if p.name == name:
+                return p
+            
+        return None
+    
+    def setPositions(self):
+        for c in self.counties:
+            for can in c.candidates:
+                p = self.findPosition(can.officeDescription)
+                if p == None:
+                    p = Position(can.officeDescription)
+                    p.addCandidate(can)
+                    self.addPosition(p)
+                    continue
+
+                p.addCandidate(can)
+
+                
+
+    
     def addCounty(self, county: County):
         self.counties.append(county)
+
+    def addPosition(self, position: Position):
+        self.positions.append(position)
     
     def __str__(self):
         res = ""
@@ -102,3 +144,39 @@ class Election:
 
         return res
     
+
+class Menu:
+
+    def __init__(self, election: Election):
+        self.election = election
+
+
+    def main(self):
+        while(True):
+            print("0 - Exit")
+            print("1 - Counties")
+            print("2 - Positions")
+            res = input("> ")
+
+            if res == "0":
+                exit()
+            elif res == "1":
+                self.counties()
+            elif res == "2":
+                self.positions()
+
+    def counties(self):
+        for i, c in enumerate(self.election.counties):
+            print("{} - {}".format(i, c.name))
+
+        res = input("> ")
+
+        print(str(self.election.counties[int(res)]))
+
+    def positions(self):
+        for i, c in enumerate(self.election.positions):
+            print("{} - {}".format(i, c.name))
+
+        res = input("> ")
+
+        print(str(self.election.positions[int(res)]))
