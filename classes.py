@@ -6,7 +6,7 @@ class COLORS:
 
 class Candidate:
 
-    def __init__(self, id, name, party, votes, win, od):
+    def __init__(self, id, name, party, votes: int, win, od):
         self.id = id
         self.name = name
         self.party = party
@@ -36,7 +36,7 @@ class County:
         return res
     
     def sort(self):
-        self.candidates.sort(key=lambda x: x.votes, reverse=True)
+        self.candidates.sort(key=lambda x: int(x.votes), reverse=True)
 
     def topTwo(self, pos):
         l = [x for x in self.candidates if x.officeDescription == pos]
@@ -46,7 +46,7 @@ class County:
             lColor = ""
             rColor = ""
 
-            if l[0].votes > l[1].votes:
+            if int(l[0].votes) > int(l[1].votes):
                 lColor = COLORS.GREEN
                 rColor = COLORS.RED
             else:
