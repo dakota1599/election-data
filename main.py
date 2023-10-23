@@ -11,10 +11,16 @@ def main():
     for line in f:
         w = line.split(',')
         county = election.findCounty(w[4])
+        position = election.findPosition(w[6])
         setCounty = False
+        setPosition = False
         if (county == None):
             county = County(w[4], w[5])
             setCounty = True
+
+        if (position == None):
+            position = Position(w[6])
+            setPosition = True
 
         win = False
         if w[18] == "E\n" or w[18] == "N\n":
@@ -24,11 +30,20 @@ def main():
 
         county.addCandidate(candidate)
 
+        posCandidate = position.getCandidate(candidate.name)
+        if (posCandidate == None):
+            position.addCandidate(candidate)
+        else:
+            v = int(posCandidate.votes) + int(candidate.votes)
+            posCandidate.votes = v
+
         if(setCounty):
             election.addCounty(county)
 
+        if (setPosition):
+            election.addPosition(position)
+
     f.close()
-    election.setPositions()
     menu = Menu(election)
 
     menu.main()

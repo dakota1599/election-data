@@ -76,6 +76,12 @@ class Position:
     def addCandidate(self, candidate: Candidate):
         self.candidates.append(candidate)
 
+    def getCandidate(self, name: str):
+        for c in self.candidates:
+            if c.name == name: return c
+        
+        return None
+
     def sort(self):
         self.candidates.sort(key=lambda x: int(x.votes), reverse=True)
 
@@ -107,21 +113,6 @@ class Election:
             
         return None
     
-    def setPositions(self):
-        for c in self.counties:
-            for can in c.candidates:
-                p = self.findPosition(can.officeDescription)
-                if p == None:
-                    p = Position(can.officeDescription)
-                    p.addCandidate(can)
-                    self.addPosition(p)
-                    continue
-
-                p.addCandidate(can)
-
-                
-
-    
     def addCounty(self, county: County):
         self.counties.append(county)
 
@@ -136,7 +127,7 @@ class Election:
 
         return res
     
-    def topTwo(self, name):
+    def topTwoCounties(self, name):
         res = ""
 
         for ct in self.counties:
